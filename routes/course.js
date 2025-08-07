@@ -8,7 +8,7 @@ courseRoutes.post("/purchase", function(req, res) {
     })
 })
 
-courseRoutes.post("/preview", function(req, res) {
+courseRoutes.get("/preview", function(req, res) {
     res.json({
         message: "preview endpoint"
     })
