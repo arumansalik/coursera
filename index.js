@@ -10,7 +10,7 @@ app.use("/course", courseRoutes);
 app.use("/admin", AdminRoutes);
 
 async function main() {
-    await mongoose.connect('');
+    await mongoose.connect('mongodb+srv://admin:KJIBcmmiPhuqeLlC@cluster0.4gpl4ag.mongodb.net/coursera-app');
     app.listen(3000);
     console.log("listening on port 3000");
 }
