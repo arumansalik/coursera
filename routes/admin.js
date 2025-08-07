@@ -1,20 +1,50 @@
 const {Router} = require("express");
 const {adminModel} = require("../db");
+const jwt = require("jsonwebtoken");
 const AdminRoutes = Router();
+const JWT_SECRET_ADMIn = "ilovesalik";
 
-AdminRoutes.post("/signup", function(req, res) {
-
+AdminRoutes.post("/signup", async function(req, res) {
+    const {email, password, fName, lName} = req.body;
+    try {
+        await adminModel.create({
+            email,
+            password,
+            fName,
+            lName
+        })
+    } catch(e) {
+        res.json({
+            message: "Signup failed"
+        })
+    }
     
     res.json({
-        message: "Signup Adminn"
+        message: "signup endpoint"
     })
-});
+})
 
-AdminRoutes.post("/signin", function(req, res) {
-    res.json({
-        message: "Signup Adminn"
+AdminRoutes.post("/signin", async function(req, res) {
+    const {email, password} = req.body;
+
+    const admin = await adminModel.findOne({
+        email: email,
+        password: password
+    });
+
+    if(admin) {
+        const token = jwt.sign({
+            id: admin._id
+        }, JWT_SECRET_ADMIn);
+        res.json({
+            token: token
+        })
+    } else {
+    res.status(403).json({
+        message: "Incorrect Credientiials"
     })
-});
+}   
+})
 
 AdminRoutes.post("/course", function(req, res) {
     res.json({
