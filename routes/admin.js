@@ -1,15 +1,16 @@
 const {Router} = require("express");
 const {adminModel} = require("../db");
-
 const AdminRoutes = Router();
 
-AdminRoutes.post("/signin", function(req, res) {
+AdminRoutes.post("/signup", function(req, res) {
+
+    
     res.json({
-        message: "Signin Adminn"
+        message: "Signup Adminn"
     })
 });
 
-AdminRoutes.post("/signup", function(req, res) {
+AdminRoutes.post("/signin", function(req, res) {
     res.json({
         message: "Signup Adminn"
     })
