@@ -1,8 +1,10 @@
 const {Router} = require("express");
-const {adminModel} = require("../db");
+const {adminModel, courseModel} = require("../db");
 const jwt = require("jsonwebtoken");
 const AdminRoutes = Router();
-const JWT_SECRET_ADMIn = "ilovesalik";
+const {JWT_SECRET_ADMIN} = require("../config");
+const { adminMiddleWare } = require("../middleware/admin");
+
 
 AdminRoutes.post("/signup", async function(req, res) {
     const {email, password, fName, lName} = req.body;
@@ -35,7 +37,7 @@ AdminRoutes.post("/signin", async function(req, res) {
     if(admin) {
         const token = jwt.sign({
             id: admin._id
-        }, JWT_SECRET_ADMIn);
+        }, JWT_SECRET_ADMIN);
         res.json({
             token: token
         })
@@ -46,7 +48,19 @@ AdminRoutes.post("/signin", async function(req, res) {
 }   
 })
 
-AdminRoutes.post("/course", function(req, res) {
+AdminRoutes.post("/course", adminMiddleWare, async function(req, res) {
+    const adminId = req.userId;
+
+    const {title, descrption, imageUrl, price} = req.body;
+
+    await courseModel.create({
+        title: title, 
+        descrption: descrption,
+        imageUrl: imageUrl,
+        price: price,
+        creatorId: adminId
+    })
+      
     res.json({
         message: "course Adminn"
     })
