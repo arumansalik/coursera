@@ -1,7 +1,7 @@
-const JWT_SECRET = "ilovearuman";
-const JWT_SECRET_ADMIN = "ilovesalik";
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET_ADMIN =  process.env.JWT_SECRET_ADMIN;
 
-module.exports({
+module.exports = ({
     JWT_SECRET,
     JWT_SECRET_ADMIN
 })

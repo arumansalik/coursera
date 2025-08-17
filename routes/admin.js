@@ -53,7 +53,7 @@ AdminRoutes.post("/course", adminMiddleWare, async function(req, res) {
 
     const {title, descrption, imageUrl, price} = req.body;
 
-    await courseModel.create({
+    const course = await courseModel.create({
         title: title, 
         descrption: descrption,
         imageUrl: imageUrl,
@@ -62,11 +62,50 @@ AdminRoutes.post("/course", adminMiddleWare, async function(req, res) {
     })
       
     res.json({
-        message: "course Adminn"
+        message: "course Created",
+        courseId: course._id
     })
 });
 
+
+AdminRoutes.put("/course", async function(req, res) {
+    const adminId = req.userId;
+
+    const {title, descrption, imageUrl, price, courseId} = req.body;
+
+    const course = await courseModel.updateOne({
+        _id: courseId,
+        creatorId: adminId
+    }, {
+        title: title, 
+        descrption: descrption,
+        imageUrl: imageUrl,
+        price: price
+    })
+    res.json({
+        message: "course Updated ",
+        courseId: course._id
+    })
+});
+
+
+AdminRoutes.get("/course/bulk", adminMiddleWare, async function(req, res) {
+    const adminId = req.userId;
+
+    const courses = await courseModel.find({
+        
+        creatorId: adminId
+    });
+
+    res.json({
+        message: "Courses fetched",
+        courses
+    });
+});
+
+
 AdminRoutes.delete("/course", function(req, res) {
+    
     res.json({
         message: "delete course Adminn"
     })
@@ -78,11 +117,7 @@ AdminRoutes.post("/course", function(req, res) {
     })
 });
 
-AdminRoutes.put("/courses", function(req, res) {
-    res.json({
-        message: "course Adminn"
-    })
-});
+
 
 module.exports = {
     AdminRoutes: AdminRoutes
